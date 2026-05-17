@@ -51,35 +51,34 @@ Dijkstra     | -         | O((V+E)logV)| -       | O(V)
 
 ---
 
-## Mülakatta Sık Sorulan Sorular
+## Mülakat Soruları
 
-### Arrays & Strings
-- Two Sum neden HashMap ile O(n)'de çözülür?
-- Sliding Window ne zaman kullanılır?
-- Kadane algoritması ne yapar?
+**Q: Two Sum neden HashMap ile O(n)'de çözülür?**
+A: Brute force: iki döngü ile her çift kontrol = O(n²). HashMap: target - nums[i]'nin daha önce görüldüğünü O(1)'de kontrol et. Tek geçiş (O(n)): Her elemanda `complement = target - nums[i]`, map'te var mı bak, varsa cevap buldun, yoksa map'e ekle. Space: O(n). Aynı teknik: "iki sayı toplamı X'e eşit mi" sorularında standart yaklaşım.
 
-### Linked List
-- Floyd's Cycle Detection nasıl çalışır?
-- Linked List'i O(1) space ile nasıl ters çevirirsin?
+**Q: Sliding Window ne zaman kullanılır?**
+A: Dizi/string üzerinde "belirli uzunlukta alt dizi" veya "koşulu sağlayan en uzun/kısa alt dizi" problemlerinde. İki pointer (left, right) ile pencere genişletilip daraltılır. Fixed size: sağ pointer ilerleyince sol pointer 1 ilerler. Variable size: koşul bozulunca sol pointer ilerler. Örnekler: "K boyutunda maksimum toplam alt dizi", "en uzun benzersiz karakterli substring", "minimum size subarray sum".
 
-### Stack & Queue
-- Stack kullanarak Queue nasıl implemente edilir?
-- Monotonic Stack nedir, hangi problemlerde kullanılır?
+**Q: Floyd's Cycle Detection nasıl çalışır?**
+A: Two pointer (slow/fast). Slow her adımda 1, fast her adımda 2 ilerler. Cycle varsa fast → yavaşı geçemez, eninde sonunda buluşurlar. Cycle yok: fast null'a ulaşır. Toplantı noktasından cycle başlangıcını bulmak için: bir pointer head'e döner, ikisi aynı hızda ilerler — tekrar buluştukları yer cycle başlangıcı. O(n) time, O(1) space. Alternatif HashSet O(n) space ister.
 
-### Tree
-- BFS vs DFS ne zaman hangisi tercih edilir?
-- LCA (Lowest Common Ancestor) algoritması?
-- BST inorder traversal neden sıralı dizi verir?
+**Q: BFS vs DFS ne zaman hangisi tercih edilir?**
+A: BFS: En kısa yol (unweighted graph), level-order traversal, "kaç adımda ulaşılır" soruları. Queue kullanır. Hafıza: O(W) — W genişlik (ağaçta max level). DFS: Yol var mı, tüm yolları bul, topological sort, cycle detection, backtracking. Stack (veya recursion) kullanır. Hafıza: O(H) — H yükseklik. BFS genişliği az derin ağaçta, DFS dar derin ağaçta daha verimli.
 
-### Graph
-- Topological Sort ne zaman kullanılır?
-- Dijkstra negatif ağırlıklı edge'lerde çalışır mı?
-- Union-Find'ın path compression'ı neden önemli?
+**Q: Topological Sort ne zaman kullanılır?**
+A: DAG (Directed Acyclic Graph) üzerinde bağımlılık sıralaması için. Örnekler: build order (A derlemek için B gerekli), ders önkoşulları, task scheduling. İki yöntem: Kahn algoritması (BFS + in-degree 0) veya DFS (post-order ekle, reverse). Cycle varsa topological sort mümkün değil — bu cycle detection için de kullanılır.
 
-### Dynamic Programming
-- Memoization vs Tabulation farkı nedir?
-- Bir problemi DP ile çözüp çözemeyeceğini nasıl anlarsın?
-- 0/1 Knapsack ile Unbounded Knapsack farkı?
+**Q: Dijkstra negatif ağırlıklı edge'lerde çalışır mı?**
+A: Hayır. Dijkstra'nın greedy yapısı: bir düğümü "kesinleşti" olarak işaretleyince bir daha ziyaret edilmez. Negatif edge varsa kesinleştirilmiş düğümün maliyeti sonradan düşebilir — hatalı sonuç. Çözüm: Bellman-Ford (O(VE)) — negatif cycle tespiti de yapar. Negatif ağırlık yoksa Dijkstra O((V+E) log V) priority queue ile.
+
+**Q: Memoization vs Tabulation farkı nedir?**
+A: Memoization (top-down): Recursive çözümde hesaplanan değerleri cache'e (HashMap) yaz. Sadece ihtiyaç duyulan alt problemler hesaplanır. Stack overflow riski var (derin recursion). Tabulation (bottom-up): Küçükten büyüğe tüm alt problemleri iteratif çöz. Stack yok, genellikle daha hızlı, space optimizasyonu kolay. Fark: Memoization yazması daha kolay (recursive düşün + cache ekle), tabulation daha verimli.
+
+**Q: Bir problemi DP ile çözüp çözemeyeceğini nasıl anlarsın?**
+A: İki koşul: (1) Optimal substructure — büyük problemin çözümü küçük problemlerin çözümünden oluşur. (2) Overlapping subproblems — aynı alt problemler tekrar tekrar hesaplanır. Test: "n için doğruysa, n+1 için nasıl kullanırım?" sorusunu sor — eğer cevap varsa DP çalışır. Recurrence relation yaz: `dp[i] = dp[i-1] + dp[i-2]` gibi. Greedy farkı: Greedy bir sonraki en iyi seçimi yapar, DP tüm seçenekleri dener.
+
+**Q: 0/1 Knapsack ile Unbounded Knapsack farkı?**
+A: 0/1 Knapsack: Her item bir kez kullanılabilir. `dp[i][w] = max(dp[i-1][w], dp[i-1][w-weight[i]] + value[i])`. Unbounded: Aynı item sınırsız kullanılabilir. `dp[w] = max(dp[w], dp[w-weight[i]] + value[i])` — aynı satırda güncelleme (item'ı tekrar kullanabilir). Uygulama: Coin change unbounded (aynı para birimi sınırsız). 0/1: Görev seçimi (her görev bir kez).
 
 ---
 
